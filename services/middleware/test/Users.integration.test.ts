@@ -8,16 +8,19 @@ import assert from "assert";
 const testUsers = [
   {
     name: "Michael",
+    surname: "B",
     nick: "mibreit",
     age: 43,
   },
   {
     name: "John",
+    surname: "Doe",
     nick: "JD",
     age: 66,
   },
   {
     name: "Albert",
+    surname: "E",
     nick: "A",
     age: 55,
   },
@@ -32,7 +35,7 @@ describe("User Management Integration Test Suite", () => {
     const users = await createUsers(testUsers);
     const result = await server.executeOperation(
       {
-        query: `query {users {id, name, nick, age}}`,
+        query: `query {users {id, name, surname, nick, age}}`,
       },
       {
         contextValue: {
