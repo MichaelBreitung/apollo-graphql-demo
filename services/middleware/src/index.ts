@@ -75,9 +75,9 @@ const startServer = async (
   const app = express();
   app.use(cors());
   app.use(express.json());
+  const httpServer = createServer(app);
 
   if (subscriptionSupport) {
-    const httpServer = createServer(app);
     const wsServer = new WebSocketServer({
       server: httpServer,
       path: "/graphql",
@@ -109,12 +109,6 @@ const startServer = async (
         context: async () => context,
       })
     );
-
-    httpServer.listen(4000, () => {
-      console.log(
-        `Apollo Server with Subscription Support is Ready at http://localhost:4000/graphql`
-      );
-    });
   } else {
     const server = new ApolloServer({
       schema,
@@ -127,11 +121,13 @@ const startServer = async (
         context: async () => context,
       })
     );
-
-    app.listen(4000, () => {
-      console.log(`Apollo Server is Ready at http://localhost:4000/graphql`);
-    });
   }
+
+  httpServer.listen(4000, () => {
+    console.log(
+      `Apollo Server with Subscription Support is Ready at http://localhost:4000/graphql`
+    );
+  });
 };
 
 startServer();
