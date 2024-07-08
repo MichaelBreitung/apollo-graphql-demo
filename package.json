@@ -1,0 +1,17 @@
+{
+  "name": "graphql-apollo",
+  "private": true,
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "license": "MIT",
+  "author": "Michael Breitung",
+  "devDependencies": {},
+  "dependencies": {},
+  "workspaces": [
+    "services/middleware",
+    "frontend"
+  ]
+}
