@@ -4,7 +4,14 @@ export type TDataModel = {
 };
 
 // Definition of SQL Columns
-// TODO: friends can be optimized later, storing the relation in a separate table
+// TODO: This is currently a denormalized table, since the friends
+// relationships are directly contained in the users table. It's good
+// for reads, but adding friendships involves several steps and both
+// users need to modify their friends string. Normalization could improve
+// this via a friendships table. Reads would become a bit more complex though.
+// A separate friendships table could also help, if you are interested in
+// displaying all relationships in a graph for example. Then you would want
+// access to all the friendships.
 export const UsersModel: TDataModel = {
   columns: `
   id SERIAL PRIMARY KEY,

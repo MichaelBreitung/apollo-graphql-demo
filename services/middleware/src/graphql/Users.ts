@@ -97,13 +97,13 @@ export const usersResolvers = {
       const newUserData = await context.users.addUser(
         args.user as TNewUserData
       );
-      const newUser = { ...newUserData };
+
       if (context.pubsub) {
         context.pubsub.publish(USER_CREATED_EVENT, {
-          userCreated: newUser,
+          userCreated: newUserData,
         });
       }
-      return newUser;
+      return newUserData;
     },
     makeFriends: (_parent: any, args: any, context: TContext, _info: any) =>
       context.users.makeFriends(args.id1, args.id2),
