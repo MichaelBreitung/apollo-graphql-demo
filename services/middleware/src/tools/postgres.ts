@@ -12,7 +12,7 @@ async function initializeDatabase(config: PostgresConfig): Promise<Pool> {
     user: config.postgresUser,
     host: config.postgresHost,
     password: config.postgresPassword,
-    database: config.postgresDb,
+    database: "postgres",
     port: 5432,
   });
   try {
