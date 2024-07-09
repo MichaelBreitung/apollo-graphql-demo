@@ -17,6 +17,7 @@ import { pg } from "./tools";
 import type { PostgresConfig } from "./tools";
 import { createUsers, TNewUserData } from "./data";
 import { getSchema, getContext } from "./graphql";
+import { getRouter } from "./rest";
 
 const initialUsers: Array<TNewUserData> = [
   {
@@ -78,6 +79,9 @@ const startServer = async (
   const users = await createUsers(initialUsers, databasePool);
   const context = getContext(users, subscriptionSupport);
   const schema = getSchema();
+
+  // setup REST
+  app.use(getRouter(users));
 
   // setup websocket for subscription
   let serverCleanup;
