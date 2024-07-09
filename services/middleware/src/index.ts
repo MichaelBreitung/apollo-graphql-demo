@@ -63,66 +63,61 @@ const startServer = async (
   subscriptionSupport: boolean = true
 ) => {
   const config = getConfiguration();
-  let databasePool;
-  if (withDatabae) {
-    databasePool = await pg.initializeDatabase(config);
-  }
 
-  const users = await createUsers(initialUsers, databasePool);
-  const context = getContext(users, subscriptionSupport);
-  const schema = getSchema();
-
+  // setup express
   const app = express();
   app.use(cors());
   app.use(express.json());
   const httpServer = createServer(app);
 
+  // setup data and context
+  let databasePool;
+  if (withDatabae) {
+    databasePool = await pg.initializeDatabase(config);
+  }
+  const users = await createUsers(initialUsers, databasePool);
+  const context = getContext(users, subscriptionSupport);
+  const schema = getSchema();
+
+  // setup websocket for subscription
+  let serverCleanup;
   if (subscriptionSupport) {
     const wsServer = new WebSocketServer({
       server: httpServer,
       path: "/graphql",
     });
-    const serverCleanup = useServer({ schema, context }, wsServer);
-
-    const server = new ApolloServer({
-      schema,
-      csrfPrevention: true,
-      cache: "bounded",
-      plugins: [
-        ApolloServerPluginDrainHttpServer({ httpServer }),
-        {
-          async serverWillStart() {
-            return {
-              async drainServer() {
-                await serverCleanup.dispose();
-              },
-            };
-          },
-        },
-      ],
-    });
-    await server.start();
-
-    app.use(
-      "/graphql",
-      expressMiddleware(server, {
-        context: async () => context,
-      })
-    );
-  } else {
-    const server = new ApolloServer({
-      schema,
-    });
-    await server.start();
-
-    app.use(
-      "/graphql",
-      expressMiddleware(server, {
-        context: async () => context,
-      })
-    );
+    serverCleanup = useServer({ schema, context }, wsServer);
   }
 
+  // setup Apollo GraphQL
+  const server = new ApolloServer({
+    schema,
+    csrfPrevention: true,
+    cache: "bounded",
+    plugins: serverCleanup
+      ? [
+          ApolloServerPluginDrainHttpServer({ httpServer }),
+          {
+            async serverWillStart() {
+              return {
+                async drainServer() {
+                  await serverCleanup.dispose();
+                },
+              };
+            },
+          },
+        ]
+      : [],
+  });
+  await server.start();
+  app.use(
+    "/graphql",
+    expressMiddleware(server, {
+      context: async () => context,
+    })
+  );
+
+  // start listening
   httpServer.listen(4000, () => {
     console.log(
       `Apollo Server with Subscription Support is Ready at http://localhost:4000/graphql`
