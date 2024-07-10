@@ -25,4 +25,20 @@ export default class UsersService {
   public async makeFriends(id1: number, id2: number): Promise<boolean> {
     return this._users.makeFriends(id1, id2);
   }
+
+  public async getFriends(id: number): Promise<Array<TUserData> | null> {
+    let friends: Array<TUserData> | null = null;
+    const userWithFriends = await this._users.getUser(id);
+    if (userWithFriends?.friends) {
+      friends = new Array();
+      const friendIds = userWithFriends.friends.split(", ").map(Number);
+      for (let i = 0; i < friendIds.length; i++) {
+        const friend = await this._users.getUser(friendIds[i]);
+        if (friend) {
+          friends!.push(friend);
+        }
+      }
+    }
+    return friends;
+  }
 }

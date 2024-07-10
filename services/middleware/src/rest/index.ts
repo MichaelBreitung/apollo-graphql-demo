@@ -35,7 +35,7 @@ export function getRouter(users: IUsers) {
       const user = await usersService.getUser(Number(id));
       sendResult(user, res);
     } else {
-      sendError("REST GET /users/id -> Invalid Request", 400, res);
+      sendError(`REST GET /users/${id} -> Invalid Request`, 400, res);
     }
   });
 
@@ -50,6 +50,22 @@ export function getRouter(users: IUsers) {
     }
   });
 
+  router.get("/users/:id/friends", async (req: Request, res: Response) => {
+    const userId = req.params.id;
+    const friendId = req.body.friendId;
+
+    if (typeof friendId === "number" && userId) {
+      const friends = await usersService.getFriends(Number(userId));
+      sendResult(friends, res);
+    } else {
+      sendError(
+        `REST GET /users/${userId}/friends -> Invalid Request`,
+        400,
+        res
+      );
+    }
+  });
+
   router.put("/users/:id/friends", async (req: Request, res: Response) => {
     const userId = req.params.id;
     const friendId = req.body.friendId;
@@ -61,7 +77,11 @@ export function getRouter(users: IUsers) {
       );
       sendResult(createdUser, res);
     } else {
-      sendError("REST POST /users -> Invalid Request", 400, res);
+      sendError(
+        `REST PUT /users/${userId}/friends -> Invalid Request`,
+        400,
+        res
+      );
     }
   });
 
@@ -72,7 +92,7 @@ export function getRouter(users: IUsers) {
       const deleted = await usersService.getUser(Number(id));
       sendResult(deleted, res);
     } else {
-      sendError("REST DELETE /users/id -> Invalid Request", 400, res);
+      sendError(`REST DELETE /users/${id} -> Invalid Request`, 400, res);
     }
   });
 
