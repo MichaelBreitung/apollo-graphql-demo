@@ -22,7 +22,7 @@ async function initializeDatabase(config: PostgresConfig): Promise<Pool> {
       config.postgresDb
     );
     if (!databaseExists) {
-      createDatabase(defaultClient, config.postgresDb);
+      await createDatabase(defaultClient, config.postgresDb);
     }
   } catch (error) {
     throw new Error(`PG: initializeDatabase -> ${error}`);
