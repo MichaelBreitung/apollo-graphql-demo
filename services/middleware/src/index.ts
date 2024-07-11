@@ -60,7 +60,7 @@ function getConfiguration(): PostgresConfig {
 }
 
 const startServer = async (
-  withDatabae: boolean = true,
+  withDatabase: boolean = true,
   subscriptionSupport: boolean = true
 ) => {
   const config = getConfiguration();
@@ -73,7 +73,7 @@ const startServer = async (
 
   // setup data and context
   let databasePool;
-  if (withDatabae) {
+  if (withDatabase) {
     databasePool = await pg.initializeDatabase(config);
   }
   const users = await createUsers(initialUsers, databasePool);

@@ -52,9 +52,8 @@ export function getRouter(users: IUsers) {
 
   router.get("/users/:id/friends", async (req: Request, res: Response) => {
     const userId = req.params.id;
-    const friendId = req.body.friendId;
 
-    if (typeof friendId === "number" && userId) {
+    if (userId) {
       const friends = await usersService.getFriends(Number(userId));
       sendResult(friends, res);
     } else {

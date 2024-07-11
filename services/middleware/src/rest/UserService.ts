@@ -28,6 +28,7 @@ export default class UsersService {
 
   public async getFriends(id: number): Promise<Array<TUserData> | null> {
     let friends: Array<TUserData> | null = null;
+
     const userWithFriends = await this._users.getUser(id);
     if (userWithFriends?.friends) {
       friends = new Array();
@@ -35,10 +36,11 @@ export default class UsersService {
       for (let i = 0; i < friendIds.length; i++) {
         const friend = await this._users.getUser(friendIds[i]);
         if (friend) {
-          friends!.push(friend);
+          friends.push(friend);
         }
       }
     }
+
     return friends;
   }
 }
