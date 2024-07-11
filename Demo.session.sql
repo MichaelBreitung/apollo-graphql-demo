@@ -11,5 +11,11 @@ SELECT EXISTS (
 -- Get all rows from users table
 SELECT * FROM users;
 
+-- Get all rows from users table where user id is < 3
+SELECT * FROM users u WHERE id < 3;
+
 -- Delete users table
 DROP TABLE users
+
+-- Get multiple users with one call
+SELECT * FROM users u WHERE id in (1, 3);

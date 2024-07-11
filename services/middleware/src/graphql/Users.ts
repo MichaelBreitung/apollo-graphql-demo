@@ -82,6 +82,8 @@ export const usersResolvers = {
       if (userWithFriends?.friends) {
         friends = new Array();
         const friendIds = userWithFriends.friends.split(", ").map(Number);
+        // TODO: This loop is not required if we extend the UsersInterface and
+        // provide a way to query a specific set of users.
         for (let i = 0; i < friendIds.length; i++) {
           const friend = await context.users.getUser(friendIds[i]);
           if (friend) {
