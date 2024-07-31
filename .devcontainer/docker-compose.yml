@@ -6,9 +6,15 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
+      # prevent the host's postgres-data folder from being mounted
+      - /home/developer/develop/postgres-data
+      # don't mount node_modules
       - /home/developer/develop/node_modules
+      # main dev mount
       - ..:/home/developer/develop
+      # ssh keys mount
       - ${HOME}/.ssh:/home/developer/.ssh
+      # docker socket mount
       - /var/run/docker.sock:/var/run/docker.sock
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -31,6 +37,6 @@ services:
       - POSTGRES_PASSWORD=1234
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - /postgres/data:/var/lib/postgresql/data
+      - ../postgres-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
