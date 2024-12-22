@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { useSubscription, gql } from "@apollo/client";
 import "./App.css";
 
-import { graphQLUrl } from "./constants.ts";
+import { graphQLUrl, restGetUsers } from "./constants.ts";
 
 const USER_CREATED = gql`
   subscription UserCreated {
@@ -50,6 +50,22 @@ function App() {
     }
   }, []);
 
+  const fetchUsersREST = useCallback(async () => {
+    try {
+      const fetched = await fetch(restGetUsers, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await fetched.json();
+      setData(JSON.stringify(data));
+    } catch (e: unknown) {
+      console.error("Exception: ", e);
+    }
+  }, []);
+
   return (
     <div id="main" className="v-container">
       <h1 className="t-center">GraphQL Tester</h1>
@@ -57,6 +73,7 @@ function App() {
         {" "}
         <button onClick={getSchema}>Get Schema</button>{" "}
         <button onClick={fetchUsers}>Fetch Users</button>
+        <button onClick={fetchUsersREST}>Fetch Users REST</button>
       </div>
       <p>Data:</p>
       <p>{data}</p>
