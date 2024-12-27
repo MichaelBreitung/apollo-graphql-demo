@@ -2,6 +2,8 @@ import { useCallback, useState } from "react";
 import { useSubscription, gql } from "@apollo/client";
 import "./App.css";
 
+import typia from "typia";
+
 import { graphQLUrl, restGetUsers } from "./constants.ts";
 
 const USER_CREATED = gql`
@@ -11,6 +13,17 @@ const USER_CREATED = gql`
     }
   }
 `;
+
+export type TUserData = {
+  id: number;
+  name: string;
+  surname: string;
+  nick?: string | null;
+  age?: number | null;
+  friends?: string | null;
+};
+
+const isUserData = typia.createIs<Array<TUserData>>();
 
 function App() {
   const [data, setData] = useState<string>("");
@@ -27,6 +40,7 @@ function App() {
       });
 
       const data = await fetched.json();
+
       setData(JSON.stringify(data));
     } catch (e: unknown) {
       console.error("Exception: ", e);
@@ -60,7 +74,11 @@ function App() {
       });
 
       const data = await fetched.json();
-      setData(JSON.stringify(data));
+      if (isUserData(data)) {
+        setData(JSON.stringify(data));
+      } else {
+        setData("ERROR");
+      }
     } catch (e: unknown) {
       console.error("Exception: ", e);
     }

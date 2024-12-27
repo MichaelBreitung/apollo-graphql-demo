@@ -16,6 +16,10 @@ I've setup the project as a monorepo containing both a frontend and a middleware
 
 [Vite](https://vitejs.dev/) is used to provide a development server for testing of the frontend.
 
+### Typia
+
+Runtime Type validation is done using [Typia](https://github.com/samchon/typia).
+
 ### Apollo Server
 
 [Apollo Server V4](https://www.apollographql.com/docs/apollo-server/v4/) provides the GraphQL implementation.
@@ -54,6 +58,8 @@ When starting the Dev Container, a Postgres container is also started. It is use
 ### frontend
 
 The source code is located under "frontend/src". Before you make changes, start the development server via `npm run dev` inside the "frontend" folder. If you make changes, press `r + Enter` in the console window that is currently running the development server. It will restart the server and reload the page. Automatic reloading will only work, if your host system is Linux-based. If your host system is Windows, file changes are not properly propagated to the Dev Container and Vite will not recognize those automatically.
+
+The frontend app will be available on "http://localhost:80".
 
 ### middleware
 

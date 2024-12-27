@@ -1,5 +1,14 @@
 {
   "files": [],
+  "compilerOptions": {
+    "plugins": [
+      {
+        "transform": "typia/lib/transform"
+      }
+    ],
+    "strictNullChecks": true,
+    "strict": true
+  },
   "references": [
     {
       "path": "./tsconfig.app.json"

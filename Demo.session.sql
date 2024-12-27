@@ -15,7 +15,7 @@ SELECT * FROM users;
 SELECT * FROM users WHERE id < 3;
 
 -- Delete users table
-DROP TABLE users
+DROP TABLE users;
 
 -- Get multiple users with one call
 SELECT * FROM users WHERE id in (1, 3);

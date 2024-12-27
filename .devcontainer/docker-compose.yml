@@ -27,6 +27,9 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234
       - POSTGRES_DB=demo
+    ports:
+      - 80:5173
+      - 4000:4000
   postgres:
     container_name: postgres-sql
     hostname: postgres
